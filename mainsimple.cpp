@@ -16,7 +16,7 @@ public:
         auto sum = 0;
         for (int i = r.begin(); i != r.end(); ++i) {
             std::vector<double> points;
-            //points.reserve(44);
+            points.reserve(44);
             for (int i = 0; i < 44; ++i) {
                 points.push_back(dist(rng));
             };
@@ -29,9 +29,10 @@ public:
 
 void tbbtest() {
     int iterations = 25000000;
-    int chunk_size = iterations / 8;
+    int chunk_size = iterations / 16;
     std::chrono::steady_clock::time_point before_call = std::chrono::steady_clock::now();
     parallel_for(blocked_range<size_t>(0, iterations, chunk_size), TBBTest(), simple_partitioner());
+    //parallel_for(blocked_range<size_t>(0, iterations), TBBTest());
     std::chrono::steady_clock::time_point after_call = std::chrono::steady_clock::now();
     std::cout << "Call took = " << std::chrono::duration_cast<std::chrono::seconds>(after_call - before_call).count() << "[s]" << std::endl;
 }
