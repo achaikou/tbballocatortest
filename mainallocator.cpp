@@ -10,12 +10,15 @@ class TBBTest {
 public:
     void operator()(const blocked_range<size_t>& r) const {
         std::chrono::steady_clock::time_point before_call = std::chrono::steady_clock::now();
+
+        std::mt19937 rng(std::random_device{}());
+        std::uniform_int_distribution<int> dist(0, INT_MAX);
         auto sum = 0;
         for (int i = r.begin(); i != r.end(); ++i) {
             std::vector<double, cache_aligned_allocator<double>> points;
             //points.reserve(44);
             for (int i = 0; i < 44; ++i) {
-                points.push_back(std::rand());
+                points.push_back(dist(rng));
             };
             sum += std::fmod(std::accumulate(points.begin(), points.end(), 0), 2);
         }
